@@ -4,17 +4,26 @@ import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
-
+import requests
+import shutil
 @click.command()
-@click.argument('input_filepath', type=click.Path(exists=True))
-@click.argument('output_filepath', type=click.Path())
-def main(input_filepath, output_filepath):
-    """ Runs data processing scripts to turn raw data from (../raw) into
+@click.argument('output_filepath', type=click.Path(exists=True))
+def main(output_filepath):
+    """ Gets data from:
+        http://codeandbeer.org/virtual/BigData/Datasets/iris.data
+        int (../data/raw).
         cleaned data ready to be analyzed (saved in ../processed).
     """
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
-
+    baseurl = "http://codeandbeer.org/virtual/BigData/Datasets/"
+    files = ["iris.data"]
+    for filename in files : 
+        r = requests.get(baseurl+"/"+filename,stream=True)
+        if r.status_code ==200:
+            with open(output_filepath+"/"+filename,"wb") as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw,f)
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
