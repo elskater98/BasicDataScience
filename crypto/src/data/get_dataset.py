@@ -9,9 +9,10 @@ import shutil
 import tarfile
 import os
 
-@click.command()
-@click.argument('output_filepath', type=click.Path(exists=True))
-def main(output_filepath):
+output_filepath = '../../data/raw/'
+
+
+def main():
     """ 
         Get data from:
             http://codeandbeer.org/virtual/BigData/Datasets/cryptocurrencypricehistory.tgz   
@@ -23,11 +24,12 @@ def main(output_filepath):
     base_url = "http://codeandbeer.org/virtual/BigData/Datasets/"
     filename = "cryptocurrencypricehistory.tgz"
 
-    response = requests.get(base_url+filename, stream=True)
+    response = requests.get(base_url + filename, stream=True)
     if response.status_code == 200:
         tarfile.open(fileobj=response.raw, mode="r|gz").extractall(output_filepath)
-        #with open(output_filepath+"/"+filename, 'wb') as f:
-            #f.write(response.raw.read())
+        # with open(output_filepath+"/"+filename, 'wb') as f:
+        # f.write(response.raw.read())
+
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
