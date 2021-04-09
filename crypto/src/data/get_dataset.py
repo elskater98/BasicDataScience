@@ -9,9 +9,9 @@ import shutil
 import tarfile
 import os
 
-@click.command()
-@click.argument('output_filepath', type=click.Path(exists=True))
-def main(output_filepath):
+output_filepath = '../../data/raw/'
+
+def main():
     """ 
         Get data from:
             http://codeandbeer.org/virtual/BigData/Datasets/cryptocurrencypricehistory.tgz   
